@@ -126,7 +126,7 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
           stagger: 0.15
         }
       );
-      gsap.fromTo(".activity-card-anim", 
+      gsap.fromTo(".activity-marquee", 
         { y: 50, opacity: 0 },
         {
           scrollTrigger: {
@@ -136,23 +136,27 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
           y: 0,
           opacity: 1,
           duration: 0.8,
-          stagger: 0.15,
           ease: "power3.out"
         }
       );
-      gsap.fromTo(".activity-btn-anim", 
-        { opacity: 0 },
-        {
-          scrollTrigger: {
-            trigger: ".activities-section",
-            start: "top 75%"
-          },
-          opacity: 1,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power2.out"
-        }
-      );
+
+      // Infinite scrolling for the marquee
+      const marquee = gsap.to(".activity-marquee", {
+        x: () => {
+          const firstSet = document.querySelector(".activity-set-1");
+          return firstSet ? -(firstSet.clientWidth + 24) : -972;
+        },
+        duration: 22,
+        ease: "none",
+        repeat: -1
+      });
+
+      // Hover controls to pause/play
+      const marqueeEl = document.querySelector(".activity-marquee");
+      if (marqueeEl) {
+        marqueeEl.addEventListener("mouseenter", () => marquee.pause());
+        marqueeEl.addEventListener("mouseleave", () => marquee.play());
+      }
 
       // 6. Packages Section ScrollTrigger
       gsap.fromTo(".package-left-anim", 
@@ -289,43 +293,73 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
          </section>
 
          {/* Activities */}
-         <section className="activities-section py-24 max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-16">
+         <section className="activities-section py-24 max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
             <div className="lg:col-span-5">
-               <p className="activity-text-anim font-semibold text-sm mb-4 text-on-surface-variant tracking-wider uppercase opacity-0">Semua Aktivitas</p>
-               <h2 className="activity-text-anim font-display text-[32px] md:text-[40px] leading-[1.2] font-semibold text-primary opacity-0">
-                 Kami melampaui sekadar melihat pemandangan—kami bersama-sama menciptakan pengalaman luar ruangan. <span className="text-outline-variant">Pendekatan terpandu kami menyempurnakan setiap perjalanan</span>, mengoptimalkan keselamatan, dan membentuk masa depan petualangan hari ini.
+               <p className="activity-text-anim font-semibold text-sm mb-3 text-[#10b981] tracking-wider uppercase opacity-0">Semua Aktivitas</p>
+               <h2 className="activity-text-anim font-display text-[36px] md:text-[48px] leading-[1.15] font-bold text-primary mb-6 opacity-0">
+                 Lebih Dari Sekadar<br/>
+                 <span className="text-outline-variant">Pemandangan</span>
                </h2>
+               <p className="activity-text-anim text-on-surface-variant text-base md:text-lg leading-relaxed max-w-md opacity-0">
+                 Kami menciptakan petualangan luar ruangan yang sesungguhnya. Pendekatan terpandu kami menyempurnakan setiap perjalanan dengan mengutamakan keselamatan dan kenyamanan Anda.
+               </p>
             </div>
-            <div className="lg:col-span-7 flex flex-col gap-6 w-full overflow-hidden">
-               <div className="flex gap-6 overflow-x-auto pb-4 snap-x no-scrollbar">
-                  <div className="activity-card-anim min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl overflow-hidden relative group snap-start cursor-pointer opacity-0">
-                     <img src={act1} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
-                        <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white"><ArrowUpRight size={16} /></div>
-                        <p className="text-white/80 text-xs font-semibold mb-1">Meluncur Kecepatan Tinggi</p>
-                        <h3 className="text-white font-display text-xl font-bold">Pengalaman Flying Fox</h3>
+            <div className="lg:col-span-7 w-full overflow-hidden py-4">
+               <div className="activity-marquee flex gap-6 w-max cursor-pointer opacity-0">
+                  {/* Set 1 */}
+                  <div className="activity-set-1 flex gap-6">
+                     <div className="min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl overflow-hidden relative group">
+                        <img src={act1} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
+                           <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white"><ArrowUpRight size={16} /></div>
+                           <p className="text-white/80 text-xs font-semibold mb-1">Meluncur Kecepatan Tinggi</p>
+                           <h3 className="text-white font-display text-xl font-bold">Pengalaman Flying Fox</h3>
+                        </div>
+                     </div>
+                     <div className="min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl overflow-hidden relative group">
+                        <img src={act2} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
+                           <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white"><ArrowUpRight size={16} /></div>
+                           <p className="text-white/80 text-xs font-semibold mb-1">Tantangan Navigasi</p>
+                           <h3 className="text-white font-display text-xl font-bold">Labirin</h3>
+                        </div>
+                     </div>
+                     <div className="min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl bg-surface-container-high relative group flex items-center justify-center">
+                        <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary"><ArrowUpRight size={16} /></div>
+                        <Map className="w-12 h-12 text-outline-variant" />
+                        <div className="absolute inset-0 flex flex-col justify-end p-6">
+                           <p className="text-on-surface-variant text-xs font-semibold mb-1">Pemandangan Kanopi</p>
+                           <h3 className="text-primary font-display text-xl font-bold">Jembatan Gantung</h3>
+                        </div>
                      </div>
                   </div>
-                  <div className="activity-card-anim min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl overflow-hidden relative group snap-start cursor-pointer opacity-0">
-                     <img src={act2} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
-                        <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white"><ArrowUpRight size={16} /></div>
-                        <p className="text-white/80 text-xs font-semibold mb-1">Tantangan Navigasi</p>
-                        <h3 className="text-white font-display text-xl font-bold">Labirin</h3>
+                  {/* Set 2 (Duplicate for Infinite Loop) */}
+                  <div className="activity-set-2 flex gap-6">
+                     <div className="min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl overflow-hidden relative group">
+                        <img src={act1} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
+                           <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white"><ArrowUpRight size={16} /></div>
+                           <p className="text-white/80 text-xs font-semibold mb-1">Meluncur Kecepatan Tinggi</p>
+                           <h3 className="text-white font-display text-xl font-bold">Pengalaman Flying Fox</h3>
+                        </div>
+                     </div>
+                     <div className="min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl overflow-hidden relative group">
+                        <img src={act2} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
+                           <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white"><ArrowUpRight size={16} /></div>
+                           <p className="text-white/80 text-xs font-semibold mb-1">Tantangan Navigasi</p>
+                           <h3 className="text-white font-display text-xl font-bold">Labirin</h3>
+                        </div>
+                     </div>
+                     <div className="min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl bg-surface-container-high relative group flex items-center justify-center">
+                        <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary"><ArrowUpRight size={16} /></div>
+                        <Map className="w-12 h-12 text-outline-variant" />
+                        <div className="absolute inset-0 flex flex-col justify-end p-6">
+                           <p className="text-on-surface-variant text-xs font-semibold mb-1">Pemandangan Kanopi</p>
+                           <h3 className="text-primary font-display text-xl font-bold">Jembatan Gantung</h3>
+                        </div>
                      </div>
                   </div>
-                  <div className="activity-card-anim min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl bg-surface-container-high relative group snap-start cursor-pointer flex items-center justify-center opacity-0">
-                     <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary"><ArrowUpRight size={16} /></div>
-                     <Map className="w-12 h-12 text-outline-variant" />
-                     <div className="absolute inset-0 flex flex-col justify-end p-6">
-                        <p className="text-on-surface-variant text-xs font-semibold mb-1">Pemandangan Kanopi</p>
-                        <h3 className="text-primary font-display text-xl font-bold">Jembatan Gantung</h3>
-                     </div>
-                  </div>
-               </div>
-               <div className="flex justify-end gap-3 mt-4">
-                  <button className="activity-btn-anim w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-colors cursor-pointer opacity-0"><ArrowLeft size={18} /></button>
-                  <button className="activity-btn-anim w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-colors cursor-pointer opacity-0"><ArrowRight size={18} /></button>
                </div>
             </div>
          </section>
