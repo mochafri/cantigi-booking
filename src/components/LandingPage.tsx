@@ -368,42 +368,90 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
          <section className="packages-section bg-primary text-white py-24">
             <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-16">
                <div className="package-left-anim lg:col-span-5 flex flex-col justify-center opacity-0">
-                  <p className="font-display text-[80px] leading-none font-bold text-white/5 pb-4">2024</p>
-                  <h2 className="font-display text-[40px] leading-tight font-bold mb-4">Pilih <br/>Petualangan Anda<span className="text-[#10b981]">.</span></h2>
-                  <h3 className="font-display text-2xl font-semibold mb-2">Mulai Rp 150rb</h3>
-                  <p className="text-sm font-semibold text-white/50 mb-6 tracking-wide">AKTIVITAS LUAR RUANGAN & CAMPING</p>
-                  <p className="text-white/70 max-w-md">Paket fleksibel yang disesuaikan untuk individu, keluarga, dan grup perusahaan. Rasakan keindahan alam terbaik dengan pilihan terkurasi kami.</p>
+                  <p className="font-display text-[80px] leading-none font-bold text-white/5 pb-4">2025</p>
+                  <h2 className="font-display text-[40px] leading-tight font-bold mb-4">Pilih <br/>Program & Sewa<span className="text-[#10b981]">.</span></h2>
+                  <h3 className="font-display text-2xl font-semibold mb-2">Mulai Rp 20.000</h3>
+                  <p className="text-sm font-semibold text-white/50 mb-6 tracking-wide">OUTING PROGRAM & CAMPING SERVICES</p>
+                  <p className="text-white/70 max-w-md">Program petualangan terstruktur untuk anak-anak, dewasa, dan keluarga. Dilengkapi fasilitas sewa tenda dan area camp lengkap di Bandung.</p>
                </div>
                <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {/* Recommended */}
                   <div className="package-card-anim bg-[#10b981] rounded-2xl p-8 flex flex-col sm:col-span-2 md:col-span-1 h-full shadow-2xl shadow-[#10b981]/20 opacity-0">
-                     <p className="text-xs font-bold text-white/80 uppercase tracking-widest mb-2">Rekomendasi</p>
-                     <h3 className="font-display text-2xl font-bold mb-2">Kombo Ultimate</h3>
-                     <p className="font-display text-[32px] font-bold mb-8">Rp 350rb</p>
-                     <ul className="space-y-4 mb-8 flex-grow">
-                        <li className="flex items-center gap-3"><span className="text-white">✓</span> Paket Camping</li>
-                        <li className="flex items-center gap-3"><span className="text-white">✓</span> Akses Semua Aktivitas</li>
-                        <li className="flex items-center gap-3"><span className="text-white">✓</span> Pemandu Profesional</li>
+                     <p className="text-xs font-bold text-white/80 uppercase tracking-widest mb-2">Rekomendasi • Terpopuler</p>
+                     <h3 className="font-display text-2xl font-bold mb-4">Outing 2D1N</h3>
+                     
+                     <div className="mb-6 flex flex-col gap-2">
+                        <div className="flex justify-between border-b border-white/20 pb-1">
+                           <span className="text-sm font-semibold opacity-90">Anak (SD - SMA)</span>
+                           <span className="font-bold text-lg">Rp 230rb</span>
+                        </div>
+                        <div className="flex justify-between border-b border-white/20 pb-1">
+                           <span className="text-sm font-semibold opacity-90">Dewasa</span>
+                           <span className="font-bold text-lg">Rp 350rb</span>
+                        </div>
+                        <div className="flex justify-between">
+                           <span className="text-sm font-semibold opacity-90">Family Gathering</span>
+                           <span className="font-bold text-lg">Rp 950rb</span>
+                        </div>
+                        <p className="text-[10px] text-white/60 mt-1">*Family min. 5 keluarga</p>
+                     </div>
+
+                     <ul className="space-y-3 mb-8 flex-grow text-sm">
+                        <li className="flex items-center gap-3"><span className="text-white">✓</span> Instruktur & Wahana Games</li>
+                        <li className="flex items-center gap-3"><span className="text-white">✓</span> Flying Fox & 1 High Rope</li>
+                        <li className="flex items-center gap-3"><span className="text-white">✓</span> Tenda, Matras & Sleeping Bag</li>
+                        <li className="flex items-center gap-3"><span className="text-white">✓</span> Games Harta Karun & Camp Craft</li>
                      </ul>
-                     <button onClick={onBook} className="w-full bg-white text-[#10b981] font-bold py-3 rounded-xl hover:bg-white/90 transition-colors shadow-sm cursor-pointer">Pilih Kombo</button>
+                     <button onClick={onBook} className="w-full bg-white text-[#10b981] font-bold py-3 rounded-xl hover:bg-white/90 transition-colors shadow-sm cursor-pointer">Pesan Sekarang</button>
                   </div>
                   
                   <div className="flex flex-col gap-6">
                      <div className="package-card-anim bg-primary-container/40 border border-white/10 rounded-2xl p-6 opacity-0">
-                       <h3 className="font-display text-xl font-bold mb-1">Paket Camping</h3>
-                       <p className="font-display text-2xl font-bold mb-4">Rp 250rb</p>
-                       <ul className="space-y-2 text-sm text-white/70">
-                          <li className="flex items-center gap-2"><span className="text-[#10b981]">✓</span> Termasuk tenda & api unggun</li>
-                          <li className="flex items-center gap-2"><span className="text-[#10b981]">✓</span> Termasuk konsumsi</li>
-                       </ul>
+                        <h3 className="font-display text-xl font-bold mb-3">Outing 1 Hari</h3>
+                        
+                        <div className="mb-4 flex flex-col gap-1.5 text-xs">
+                           <div className="flex justify-between border-b border-white/10 pb-1">
+                              <span className="opacity-80">Anak (TK - SMA)</span>
+                              <span className="font-bold">Rp 79rb</span>
+                           </div>
+                           <div className="flex justify-between border-b border-white/10 pb-1">
+                              <span className="opacity-80">Dewasa</span>
+                              <span className="font-bold">Rp 120rb</span>
+                           </div>
+                           <div className="flex justify-between">
+                              <span className="opacity-80">Family Gathering</span>
+                              <span className="font-bold">Rp 290rb</span>
+                           </div>
+                        </div>
+
+                        <ul className="space-y-2 text-xs text-white/70">
+                           <li className="flex items-center gap-2"><span className="text-[#10b981]">✓</span> Instruktur & Fun Games</li>
+                           <li className="flex items-center gap-2"><span className="text-[#10b981]">✓</span> Berkebun & Tanah Liat</li>
+                           <li className="flex items-center gap-2"><span className="text-[#10b981]">✓</span> Flying Fox & Tangkap Kelinci</li>
+                        </ul>
                      </div>
                      <div className="package-card-anim bg-primary-container/40 border border-white/10 rounded-2xl p-6 opacity-0">
-                       <h3 className="font-display text-xl font-bold mb-1">Aktivitas Luar Ruangan</h3>
-                       <p className="font-display text-2xl font-bold mb-4">Rp 150rb</p>
-                       <ul className="space-y-2 text-sm text-white/70">
-                          <li className="flex items-center gap-2"><span className="text-[#10b981]">✓</span> Akses penuh ke semua wahana</li>
-                          <li className="flex items-center gap-2"><span className="text-[#10b981]">✓</span> Termasuk peralatan keselamatan</li>
-                       </ul>
+                        <h3 className="font-display text-xl font-bold mb-3">Layanan Umum</h3>
+                        
+                        <div className="mb-4 flex flex-col gap-1.5 text-xs">
+                           <div className="flex justify-between border-b border-white/10 pb-1">
+                              <span className="opacity-80">Tiket Masuk Umum</span>
+                              <span className="font-bold">Rp 20.000</span>
+                           </div>
+                           <div className="flex justify-between border-b border-white/10 pb-1">
+                              <span className="opacity-80">Sewa Tempat Camping</span>
+                              <span className="font-bold">Rp 40rb - 60rb</span>
+                           </div>
+                           <div className="flex justify-between">
+                              <span className="opacity-80">Sewa Tenda (Isi 6 - 10)</span>
+                              <span className="font-bold">Mulai Rp 145rb</span>
+                           </div>
+                        </div>
+
+                        <ul className="space-y-2 text-xs text-white/70">
+                           <li className="flex items-center gap-2"><span className="text-[#10b981]">✓</span> Sewa Sleeping Bag & Matras</li>
+                           <li className="flex items-center gap-2"><span className="text-[#10b981]">✓</span> Kamar Mandi, Bilas & Mushola</li>
+                        </ul>
                      </div>
                   </div>
                </div>
