@@ -5,7 +5,14 @@ const headerBg = "https://lh3.googleusercontent.com/aida-public/AB6AXuATw_TtLqwU
 
 export function Step4({ data, setData, onPrev }: { data: BookingData, setData: (d: any) => void, onPrev: () => void }) {
   
-  const basePrice = 1500000;
+  const getBasePrice = () => {
+    if (data.selectedPackage === 'outing_2d1n') return 350000;
+    if (data.selectedPackage === 'outing_1d') return 120000;
+    if (data.selectedPackage === 'umum') return 20000;
+    return 0;
+  };
+  
+  const basePrice = getBasePrice();
   const total = data.groupSize * basePrice;
   const formattedTotal = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(total);
 
@@ -59,6 +66,15 @@ export function Step4({ data, setData, onPrev }: { data: BookingData, setData: (
             <div className="flex justify-between items-center py-2 border-b border-outline-variant/20">
               <span className="font-sans text-base text-on-surface-variant flex items-center gap-2"><Calendar size={18} /> Tanggal</span>
               <span className="font-sans text-base font-semibold text-on-surface">{data.date || '-'}</span>
+            </div>
+            <div className="flex justify-between items-center py-2 border-b border-outline-variant/20">
+              <span className="font-sans text-base text-on-surface-variant flex items-center gap-2">📦 Paket Pilihan</span>
+              <span className="font-sans text-base font-semibold text-on-surface">
+                {data.selectedPackage === 'outing_2d1n' && 'Outing 2D1N'}
+                {data.selectedPackage === 'outing_1d' && 'Outing 1 Hari'}
+                {data.selectedPackage === 'umum' && 'Layanan Umum'}
+                {!data.selectedPackage && '-'}
+              </span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-outline-variant/20">
               <span className="font-sans text-base text-on-surface-variant flex items-center gap-2"><Users size={18} /> Jumlah Tamu</span>

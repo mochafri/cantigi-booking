@@ -15,6 +15,7 @@ export default function App() {
   const [step, setStep] = useState(1);
   const [data, setData] = useState<BookingData>({
     date: null,
+    selectedPackage: null,
     fullName: '',
     email: '',
     phone: '',

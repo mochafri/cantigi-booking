@@ -3,16 +3,51 @@ import { BookingData } from '../types';
 
 export function Step3({ data, setData, onNext, onPrev }: { data: BookingData, setData: (d: any) => void, onNext: () => void, onPrev: () => void }) {
   
-  const isValid = data.fullName.trim() !== '' && data.email.trim() !== '' && data.phone.trim() !== '' && data.groupSize > 0;
+  const isValid = data.fullName.trim() !== '' && 
+                  data.email.trim() !== '' && 
+                  data.phone.trim() !== '' && 
+                  data.groupSize > 0 &&
+                  data.selectedPackage !== null;
 
   return (
     <section className="flex flex-col w-full max-w-3xl bg-surface rounded-2xl ambient-shadow-2 p-6 md:p-12">
-      <div className="mb-8 border-b border-outline-variant/20 pb-6">
-        <h2 className="font-display text-2xl md:text-3xl font-bold text-primary mb-2">Detail Tamu</h2>
-        <p className="font-sans text-base text-on-surface-variant">Mohon berikan informasi tamu utama untuk pemesanan ini.</p>
+      <div className="mb-6 border-b border-outline-variant/20 pb-6">
+        <h2 className="font-display text-2xl md:text-3xl font-bold text-primary mb-2">Detail Pemesanan & Tamu</h2>
+        <p className="font-sans text-base text-on-surface-variant">Lengkapi detail paket outing pilihan Anda dan data diri kontak utama.</p>
+      </div>
+
+      {/* Selected Date Summary from Step 2 */}
+      <div className="bg-primary/5 rounded-xl border border-primary/10 p-4 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+        <span className="font-sans text-sm font-semibold text-on-surface-variant">Tanggal Kedatangan Terpilih:</span>
+        <span className="font-display text-base font-bold text-primary px-3 py-1 bg-white border border-primary/10 rounded-full shadow-sm">{data.date || 'Belum Dipilih'}</span>
       </div>
       
       <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); if(isValid) onNext(); }}>
+        {/* Package Card Selectors based on flyer pricelist */}
+        <div className="flex flex-col gap-3 pb-2 border-b border-outline-variant/15">
+          <label className="font-sans text-sm font-bold text-on-surface">Pilih Paket Outing & Layanan</label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { id: 'outing_2d1n', label: 'Outing 2D1N', price: 'Rp 230rb - 350rb / org', desc: 'Camping, High Rope, Flying Fox, Harta Karun' },
+              { id: 'outing_1d', label: 'Outing 1 Hari', price: 'Rp 79rb - 120rb / org', desc: 'Fun Games, Flying Fox, Berkebun, Tanah Liat' },
+              { id: 'umum', label: 'Layanan Umum', price: 'Mulai Rp 20.000', desc: 'Tiket Masuk & Sewa Tenda/Matras Mandiri' }
+            ].map(pkg => {
+              const isSelected = data.selectedPackage === pkg.id;
+              return (
+                <div 
+                  key={pkg.id} 
+                  onClick={() => setData({...data, selectedPackage: pkg.id as any})}
+                  className={`border rounded-xl p-4 cursor-pointer transition-all flex flex-col gap-1 hover:border-primary/60 hover:bg-surface-container-low ${isSelected ? 'border-primary bg-primary-container/10 ring-1 ring-primary' : 'border-outline-variant bg-surface'}`}
+                >
+                  <span className="font-display font-bold text-sm text-primary">{pkg.label}</span>
+                  <span className="font-sans font-bold text-xs text-[#10b981]">{pkg.price}</span>
+                  <span className="font-sans text-[10px] text-on-surface-variant/80 leading-relaxed mt-1">{pkg.desc}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="fullName" className="font-sans text-sm font-semibold text-on-surface">Nama Lengkap</label>
@@ -35,7 +70,7 @@ export function Step3({ data, setData, onNext, onPrev }: { data: BookingData, se
               onChange={e => setData({...data, email: e.target.value})}
               className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-3 font-sans text-base text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-on-surface-variant/50" 
               placeholder="email@anda.com" 
-               required 
+              required 
             />
           </div>
           <div className="flex flex-col gap-1.5">
@@ -92,7 +127,7 @@ export function Step3({ data, setData, onNext, onPrev }: { data: BookingData, se
           <button 
             type="submit"
             disabled={!isValid}
-            className={`bg-primary hover:bg-primary/90 text-on-primary font-sans text-sm font-semibold px-6 py-3 rounded-full transition-colors duration-300 flex items-center gap-2 ${!isValid ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`bg-primary hover:bg-primary/90 text-on-primary font-sans text-sm font-semibold px-6 py-3 rounded-full transition-colors duration-300 flex items-center gap-2 ${!isValid ? 'opacity-50 cursor-not-allowed' : 'shadow-md shadow-primary/20 cursor-pointer'}`}
           >
             Tinjau & Bayar
             <ArrowRight size={18} />
