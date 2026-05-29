@@ -233,6 +233,22 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
           stagger: 0.15
         }
       );
+
+      // 9. Footer Section ScrollTrigger
+      gsap.fromTo(".footer-col-anim", 
+        { y: 30, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".footer-section",
+            start: "top 90%"
+          },
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: "power2.out"
+        }
+      );
     });
 
     return () => ctx.revert();
@@ -490,6 +506,65 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
               Pesan Perjalanan Anda Sekarang
             </button>
          </section>
+
+         {/* Footer */}
+         <footer className="footer-section bg-[#0a1411] text-white/80 pt-20 pb-10 px-8 border-t border-white/5">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+               {/* Col 1: Brand Info */}
+               <div className="footer-col-anim md:col-span-5 flex flex-col gap-4 opacity-0">
+                  <div className="font-display text-2xl font-bold text-[#10b981] tracking-tight">CANTIGI CAMP</div>
+                  <p className="text-sm text-white/60 max-w-sm leading-relaxed">
+                     Where The Wild Meets The Fun. Penyedia layanan program outing, edukasi alam bebas, dan bumi perkemahan terlengkap di Bandung dengan standar keselamatan tinggi.
+                  </p>
+                  <div className="text-xs text-white/40 mt-2">
+                     <p className="font-bold text-white/50 uppercase tracking-wider mb-1">Jam Operasional:</p>
+                     <p>Buka Setiap Hari (Kecuali Jumat)</p>
+                     <p>Pukul 08.00 - 16.00 WIB</p>
+                  </div>
+               </div>
+
+               {/* Col 2: Navigation Links */}
+               <div className="footer-col-anim md:col-span-3 flex flex-col gap-4 opacity-0">
+                  <h4 className="font-display font-bold text-white uppercase tracking-wider text-sm">Navigasi</h4>
+                  <ul className="flex flex-col gap-2 text-sm">
+                     <li><a href="#" className="hover:text-[#10b981] transition-colors">Beranda</a></li>
+                     <li><a href="#" className="hover:text-[#10b981] transition-colors">Tentang Kami</a></li>
+                     <li><a href="#" className="hover:text-[#10b981] transition-colors">Aktivitas Outing</a></li>
+                     <li><a href="#" className="hover:text-[#10b981] transition-colors">Paket & Layanan</a></li>
+                     <li><a href="#" className="hover:text-[#10b981] transition-colors">Syarat & Ketentuan</a></li>
+                  </ul>
+               </div>
+
+               {/* Col 3: Contact Info (Brosur Asli) */}
+               <div className="footer-col-anim md:col-span-4 flex flex-col gap-4 opacity-0">
+                  <h4 className="font-display font-bold text-white uppercase tracking-wider text-sm">Hubungi Kami</h4>
+                  <div className="flex flex-col gap-3 text-sm text-white/70">
+                     <div>
+                        <p className="font-bold text-white/50 text-xs uppercase">Alamat Camp & Office:</p>
+                        <p className="leading-relaxed">Kampung Manjah Bereum, Cileunyi Kulon, Kab. Bandung, Jawa Barat</p>
+                     </div>
+                     <div>
+                        <p className="font-bold text-white/50 text-xs uppercase">Telepon Office:</p>
+                        <p className="hover:text-[#10b981] transition-colors cursor-pointer">(022) 87821944</p>
+                     </div>
+                     <div>
+                        <p className="font-bold text-[#10b981] text-xs uppercase">WhatsApp Reservation:</p>
+                        <p className="hover:text-[#10b981] transition-colors cursor-pointer">081 320 748 356 (Andis)</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            {/* Bottom copyright */}
+            <div className="max-w-7xl mx-auto border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-white/40">
+               <p>© {new Date().getFullYear()} Cantigi Camp. All rights reserved.</p>
+               <div className="flex gap-4">
+                  <a href="#" className="hover:text-white/60 transition-colors">Kebijakan Privasi</a>
+                  <span>•</span>
+                  <a href="#" className="hover:text-white/60 transition-colors">Ketentuan Penggunaan</a>
+               </div>
+            </div>
+         </footer>
       </div>
   );
 }
