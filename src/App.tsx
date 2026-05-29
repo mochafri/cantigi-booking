@@ -40,21 +40,23 @@ export default function App() {
   }
 
   return (
-    <div className={`min-h-screen flex flex-col font-sans antialiased overflow-x-hidden ${step > 1 ? 'bg-background text-on-background' : 'bg-[#01140e] text-white'}`}>
+    <div className={`min-h-screen flex flex-col font-sans antialiased overflow-x-hidden ${step > 1 ? 'bg-background text-on-background' : 'bg-white text-on-surface'}`}>
       <Header step={step} onCancel={cancelBooking} />
       
-      <main className="flex-grow flex flex-col items-center justify-center relative w-full overflow-hidden">
-        <div 
-          className="absolute inset-0 z-0 transition-opacity duration-700" 
-          style={{
-            backgroundImage: `url('${bgImage}')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: step === 1 ? 1 : 0.05
-          }}
-        >
-          <div className="absolute inset-0 bg-primary/40 backdrop-blur-[2px]"></div>
-        </div>
+      <main className="flex-grow flex flex-col items-center justify-center relative w-full overflow-hidden bg-white">
+        {step > 1 && (
+          <div 
+            className="absolute inset-0 z-0 transition-opacity duration-700" 
+            style={{
+              backgroundImage: `url('${bgImage}')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              opacity: 0.05
+            }}
+          >
+            <div className="absolute inset-0 bg-primary/40 backdrop-blur-[2px]"></div>
+          </div>
+        )}
         
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24 flex-grow flex flex-col justify-center">
           <AnimatePresence mode="wait">
