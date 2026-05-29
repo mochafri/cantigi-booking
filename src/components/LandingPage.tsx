@@ -1,4 +1,9 @@
-import { ArrowRight, ArrowLeft, Mountain, TreePine, Map, Compass, ArrowUpRight, Star } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowRight, ArrowLeft, Mountain, TreePine, Map, Compass, ArrowUpRight } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const heroImage = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2070";
 const act1 = "https://images.unsplash.com/photo-1544334346-63e808d4b3eb?auto=format&fit=crop&q=80&w=800";
@@ -12,92 +17,288 @@ const gal4 = "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=
 const gal5 = "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&q=80&w=800"; 
 const gal6 = "https://images.unsplash.com/photo-1542273917363-3b1817f69a5d?auto=format&fit=crop&q=80&w=800"; 
 
+// Helper to split text into spans of characters for typewriter animation
+const splitTextToSpans = (text: string, charClassName: string = "char") => {
+  return text.split('').map((char, index) => (
+    <span 
+      key={index} 
+      className={`${charClassName} inline-block opacity-0`} 
+      style={{ display: char === ' ' ? 'inline' : 'inline-block' }}
+    >
+      {char === ' ' ? '\u00A0' : char}
+    </span>
+  ));
+};
+
 export function LandingPage({ onBook }: { onBook: () => void }) {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // 1. Navbar Animation (slide down and fade in)
+      gsap.fromTo(".nav-anim", 
+        { y: -30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out" }
+      );
+
+      // 2. Hero Typewriter Timeline
+      const tl = gsap.timeline();
+      tl.to(".hero-char-1", {
+        opacity: 1,
+        stagger: 0.06,
+        ease: "power1.out",
+        duration: 0.05
+      })
+      .fromTo(".hero-arrow", 
+        { scale: 0.5, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" },
+        "-=0.05"
+      )
+      .to(".hero-char-2", {
+        opacity: 1,
+        stagger: 0.06,
+        ease: "power1.out",
+        duration: 0.05
+      }, "+=0.05")
+      .to(".hero-char-3", {
+        opacity: 1,
+        stagger: 0.06,
+        ease: "power1.out",
+        duration: 0.05
+      }, "+=0.05");
+
+      // Loop animation for ArrowRight icon inside the circle (subtle bouncing horizontal slide)
+      gsap.to(".hero-arrow svg", {
+        x: 5,
+        duration: 0.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut"
+      });
+
+      // 3. Hero Image Reveal (Clip Path + Scale zoom out)
+      gsap.fromTo(".hero-image-wrap", 
+        { clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)", opacity: 0 },
+        { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)", opacity: 1, duration: 1.4, ease: "power4.inOut" }
+      );
+      gsap.fromTo(".hero-image", 
+        { scale: 1.2 },
+        { scale: 1, duration: 1.8, ease: "power3.out" }
+      );
+
+      // 4. Subnav Section scroll animation
+      gsap.fromTo(".subnav-item", 
+        { y: 20, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".subnav-section",
+            start: "top 90%",
+            toggleActions: "play none none none"
+          },
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out"
+        }
+      );
+
+      // 5. Activities Section ScrollTrigger
+      gsap.fromTo(".activity-text-anim", 
+        { y: 40, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".activities-section",
+            start: "top 80%"
+          },
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: "power3.out",
+          stagger: 0.15
+        }
+      );
+      gsap.fromTo(".activity-card-anim", 
+        { y: 50, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".activities-section",
+            start: "top 75%"
+          },
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: "power3.out"
+        }
+      );
+      gsap.fromTo(".activity-btn-anim", 
+        { opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".activities-section",
+            start: "top 75%"
+          },
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out"
+        }
+      );
+
+      // 6. Packages Section ScrollTrigger
+      gsap.fromTo(".package-left-anim", 
+        { x: -50, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".packages-section",
+            start: "top 80%"
+          },
+          x: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: "power3.out"
+        }
+      );
+      gsap.fromTo(".package-card-anim", 
+        { y: 50, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".packages-section",
+            start: "top 75%"
+          },
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: "power3.out"
+        }
+      );
+
+      // 7. Gallery Section ScrollTrigger
+      gsap.fromTo(".gallery-header-anim", 
+        { y: 30, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".gallery-section",
+            start: "top 85%"
+          },
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out"
+        }
+      );
+      gsap.fromTo(".gallery-item-anim", 
+        { y: 60, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".gallery-section",
+            start: "top 75%"
+          },
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.12,
+          ease: "power3.out"
+        }
+      );
+
+      // 8. Footer CTA Section ScrollTrigger
+      gsap.fromTo(".footer-cta-anim", 
+        { y: 30, scale: 0.95, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".footer-cta-section",
+            start: "top 85%"
+          },
+          scale: 1,
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: "power2.out",
+          stagger: 0.15
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
       <div className="bg-surface text-on-surface min-h-screen font-sans">
          {/* Navigation */}
-         <nav className="flex justify-between items-center py-6 px-8 max-w-7xl mx-auto">
-            <div className="hidden md:flex gap-6 font-semibold text-sm text-on-surface-variant">
-              <a href="#" className="hover:text-primary transition-colors">Beranda</a>
-              <a href="#" className="hover:text-primary transition-colors">Tentang</a>
-              <a href="#" className="hover:text-primary transition-colors">Aktivitas</a>
-              <a href="#" className="hover:text-primary transition-colors">Lokasi</a>
-            </div>
-            <div className="font-display text-2xl font-bold text-primary tracking-tight">Cantigi</div>
-            <button onClick={onBook} className="bg-primary hover:bg-primary/90 text-on-primary px-6 py-2.5 rounded-full font-semibold text-sm transition-colors cursor-pointer">
-              Pesan Sekarang
-            </button>
-         </nav>
+         <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+           isScrolled 
+             ? "bg-surface/85 backdrop-blur-md border-b border-outline-variant/10 shadow-sm" 
+             : "bg-surface/0 border-b border-transparent"
+         }`}>
+            <nav className="flex justify-between items-center py-4 px-8 max-w-7xl mx-auto">
+               <div className="hidden md:flex gap-6 font-semibold text-sm text-on-surface-variant">
+                 <a href="#" className="nav-anim hover:text-primary transition-colors opacity-0">Beranda</a>
+                 <a href="#" className="nav-anim hover:text-primary transition-colors opacity-0">Tentang</a>
+                 <a href="#" className="nav-anim hover:text-primary transition-colors opacity-0">Aktivitas</a>
+                 <a href="#" className="nav-anim hover:text-primary transition-colors opacity-0">Lokasi</a>
+               </div>
+               <div className="nav-anim font-display text-2xl font-bold text-primary tracking-tight opacity-0">Cantigi</div>
+               <button onClick={onBook} className="nav-anim bg-primary hover:bg-primary/90 text-on-primary px-6 py-2 rounded-full font-semibold text-sm transition-colors cursor-pointer opacity-0">
+                 Pesan Sekarang
+               </button>
+            </nav>
+         </header>
 
          {/* Hero */}
          <section className="px-8 pt-12 pb-24 max-w-7xl mx-auto flex flex-col items-center">
-            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-12">
-               <div className="lg:col-span-8 text-center lg:text-left">
-                  <h1 className="font-display text-[48px] md:text-[80px] leading-[1.05] font-bold text-primary tracking-tight">
-                    Where<span className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-[24px] border border-outline-variant align-middle ml-2"><ArrowRight className="text-primary w-6 h-6 md:w-8 md:h-8" /></span><br/>
-                    <span className="text-outline-variant">The Wild</span><br/>
-                    Meets The Fun
-                  </h1>
-               </div>
-               
-               {/* Sesuatu disamping tulisan - Adventure Card Premium */}
-               <div className="lg:col-span-4 flex flex-col items-center lg:items-start gap-5 bg-surface-container-low border border-outline-variant/30 p-6 md:p-8 rounded-[24px] ambient-shadow-1 w-full max-w-md mx-auto lg:max-w-none">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#10b981]/10 text-[#059669] text-xs font-bold">
-                     <Star size={12} className="fill-current" />
-                     <span>Destinasi Pilihan Priangan</span>
-                  </div>
-                  
-                  <div className="flex -space-x-2.5">
-                     <img className="inline-block h-9 w-9 rounded-full ring-2 ring-surface-container-low object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="User 1" />
-                     <img className="inline-block h-9 w-9 rounded-full ring-2 ring-surface-container-low object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" alt="User 2" />
-                     <img className="inline-block h-9 w-9 rounded-full ring-2 ring-surface-container-low object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" alt="User 3" />
-                     <div className="flex items-center justify-center h-9 w-9 rounded-full ring-2 ring-surface-container-low bg-primary text-white text-[10px] font-bold font-display">+4.8k</div>
-                  </div>
-                  
-                  <div>
-                     <p className="font-display font-bold text-lg text-primary text-center lg:text-left">5,000+ Petualang Puas</p>
-                     <p className="text-xs text-on-surface-variant mt-1.5 leading-relaxed text-center lg:text-left">
-                        Nikmati pengalaman outbound, jembatan gantung spektakuler, flying fox, dan camping seru bersama keluarga di bawah kaki gunung asri.
-                     </p>
-                  </div>
-                  
-                  <div className="w-full border-t border-outline-variant/30 pt-4 flex justify-between items-center gap-4">
-                     <div>
-                        <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Mulai dari</span>
-                        <p className="font-display font-bold text-base text-[#10b981]">Rp 150.000</p>
-                     </div>
-                     <button onClick={onBook} className="bg-primary hover:bg-primary/90 text-on-primary px-5 py-2.5 rounded-full font-bold text-xs transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm">
-                        Booking <ArrowRight size={14} />
-                     </button>
-                  </div>
-               </div>
+            <div className="w-full text-center md:text-left mb-12">
+               <h1 className="font-display text-[48px] md:text-[80px] leading-[1.05] font-bold text-primary tracking-tight max-w-4xl">
+                 {splitTextToSpans("Where", "hero-char-1")}
+                 <span className="hero-arrow opacity-0 inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-[24px] border border-outline-variant align-middle ml-2">
+                   <ArrowRight className="text-primary w-6 h-6 md:w-8 md:h-8" />
+                 </span>
+                 <br/>
+                 <span className="text-outline-variant">
+                   {splitTextToSpans("The Wild", "hero-char-2")}
+                 </span>
+                 <br/>
+                 {splitTextToSpans("Meets The Fun", "hero-char-3")}
+                 <span className="border-r-4 border-primary ml-1 h-[0.8em] inline-block align-middle animate-pulse"></span>
+               </h1>
             </div>
-            <div className="w-full aspect-[21/9] rounded-[32px] overflow-hidden">
-               <img src={heroImage} alt="Majestic mountain landscape" className="w-full h-full object-cover" />
+            <div className="hero-image-wrap w-full aspect-[21/9] rounded-[32px] overflow-hidden opacity-0">
+               <img src={heroImage} alt="Majestic mountain landscape" className="hero-image w-full h-full object-cover" />
             </div>
          </section>
 
          {/* Sub-nav */}
-         <section className="border-y border-outline-variant/30 py-8">
+         <section className="subnav-section border-y border-outline-variant/30 py-8">
             <div className="max-w-7xl mx-auto px-8 flex flex-wrap justify-center md:justify-between items-center gap-8 font-semibold text-on-surface-variant">
-               <div className="flex items-center gap-2 hover:text-primary cursor-pointer transition-colors"><TreePine size={20} /> Alam Liar</div>
-               <div className="flex items-center gap-2 hover:text-primary cursor-pointer transition-colors"><Mountain size={20} /> Puncak</div>
-               <div className="flex items-center gap-2 hover:text-primary cursor-pointer transition-colors"><Compass size={20} /> Jelajah</div>
-               <div className="flex items-center gap-2 hover:text-primary cursor-pointer transition-colors"><Map size={20} /> Rintis Jalur</div>
+               <div className="subnav-item flex items-center gap-2 hover:text-primary cursor-pointer transition-colors opacity-0"><TreePine size={20} /> Alam Liar</div>
+               <div className="subnav-item flex items-center gap-2 hover:text-primary cursor-pointer transition-colors opacity-0"><Mountain size={20} /> Puncak</div>
+               <div className="subnav-item flex items-center gap-2 hover:text-primary cursor-pointer transition-colors opacity-0"><Compass size={20} /> Jelajah</div>
+               <div className="subnav-item flex items-center gap-2 hover:text-primary cursor-pointer transition-colors opacity-0"><Map size={20} /> Rintis Jalur</div>
             </div>
          </section>
 
          {/* Activities */}
-         <section className="py-24 max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-16">
+         <section className="activities-section py-24 max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-16">
             <div className="lg:col-span-5">
-               <p className="font-semibold text-sm mb-4 text-on-surface-variant tracking-wider uppercase">Semua Aktivitas</p>
-               <h2 className="font-display text-[32px] md:text-[40px] leading-[1.2] font-semibold text-primary">
+               <p className="activity-text-anim font-semibold text-sm mb-4 text-on-surface-variant tracking-wider uppercase opacity-0">Semua Aktivitas</p>
+               <h2 className="activity-text-anim font-display text-[32px] md:text-[40px] leading-[1.2] font-semibold text-primary opacity-0">
                  Kami melampaui sekadar melihat pemandangan—kami bersama-sama menciptakan pengalaman luar ruangan. <span className="text-outline-variant">Pendekatan terpandu kami menyempurnakan setiap perjalanan</span>, mengoptimalkan keselamatan, dan membentuk masa depan petualangan hari ini.
                </h2>
             </div>
             <div className="lg:col-span-7 flex flex-col gap-6 w-full overflow-hidden">
                <div className="flex gap-6 overflow-x-auto pb-4 snap-x no-scrollbar">
-                  <div className="min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl overflow-hidden relative group snap-start cursor-pointer">
+                  <div className="activity-card-anim min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl overflow-hidden relative group snap-start cursor-pointer opacity-0">
                      <img src={act1} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
                         <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white"><ArrowUpRight size={16} /></div>
@@ -105,7 +306,7 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
                         <h3 className="text-white font-display text-xl font-bold">Pengalaman Flying Fox</h3>
                      </div>
                   </div>
-                  <div className="min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl overflow-hidden relative group snap-start cursor-pointer">
+                  <div className="activity-card-anim min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl overflow-hidden relative group snap-start cursor-pointer opacity-0">
                      <img src={act2} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
                         <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white"><ArrowUpRight size={16} /></div>
@@ -113,7 +314,7 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
                         <h3 className="text-white font-display text-xl font-bold">Labirin</h3>
                      </div>
                   </div>
-                  <div className="min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl bg-surface-container-high relative group snap-start cursor-pointer flex items-center justify-center">
+                  <div className="activity-card-anim min-w-[300px] w-[300px] aspect-[4/3] rounded-2xl bg-surface-container-high relative group snap-start cursor-pointer flex items-center justify-center opacity-0">
                      <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary"><ArrowUpRight size={16} /></div>
                      <Map className="w-12 h-12 text-outline-variant" />
                      <div className="absolute inset-0 flex flex-col justify-end p-6">
@@ -123,16 +324,16 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
                   </div>
                </div>
                <div className="flex justify-end gap-3 mt-4">
-                  <button className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-colors cursor-pointer"><ArrowLeft size={18} /></button>
-                  <button className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-colors cursor-pointer"><ArrowRight size={18} /></button>
+                  <button className="activity-btn-anim w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-colors cursor-pointer opacity-0"><ArrowLeft size={18} /></button>
+                  <button className="activity-btn-anim w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-colors cursor-pointer opacity-0"><ArrowRight size={18} /></button>
                </div>
             </div>
          </section>
 
          {/* Packages */}
-         <section className="bg-primary text-white py-24">
+         <section className="packages-section bg-primary text-white py-24">
             <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-16">
-               <div className="lg:col-span-5 flex flex-col justify-center">
+               <div className="package-left-anim lg:col-span-5 flex flex-col justify-center opacity-0">
                   <p className="font-display text-[80px] leading-none font-bold text-white/5 pb-4">2024</p>
                   <h2 className="font-display text-[40px] leading-tight font-bold mb-4">Pilih <br/>Petualangan Anda<span className="text-[#10b981]">.</span></h2>
                   <h3 className="font-display text-2xl font-semibold mb-2">Mulai Rp 150rb</h3>
@@ -141,7 +342,7 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
                </div>
                <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {/* Recommended */}
-                  <div className="bg-[#10b981] rounded-2xl p-8 flex flex-col sm:col-span-2 md:col-span-1 h-full shadow-2xl shadow-[#10b981]/20">
+                  <div className="package-card-anim bg-[#10b981] rounded-2xl p-8 flex flex-col sm:col-span-2 md:col-span-1 h-full shadow-2xl shadow-[#10b981]/20 opacity-0">
                      <p className="text-xs font-bold text-white/80 uppercase tracking-widest mb-2">Rekomendasi</p>
                      <h3 className="font-display text-2xl font-bold mb-2">Kombo Ultimate</h3>
                      <p className="font-display text-[32px] font-bold mb-8">Rp 350rb</p>
@@ -154,7 +355,7 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
                   </div>
                   
                   <div className="flex flex-col gap-6">
-                     <div className="bg-primary-container/40 border border-white/10 rounded-2xl p-6">
+                     <div className="package-card-anim bg-primary-container/40 border border-white/10 rounded-2xl p-6 opacity-0">
                        <h3 className="font-display text-xl font-bold mb-1">Paket Camping</h3>
                        <p className="font-display text-2xl font-bold mb-4">Rp 250rb</p>
                        <ul className="space-y-2 text-sm text-white/70">
@@ -162,7 +363,7 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
                           <li className="flex items-center gap-2"><span className="text-[#10b981]">✓</span> Termasuk konsumsi</li>
                        </ul>
                      </div>
-                     <div className="bg-primary-container/40 border border-white/10 rounded-2xl p-6">
+                     <div className="package-card-anim bg-primary-container/40 border border-white/10 rounded-2xl p-6 opacity-0">
                        <h3 className="font-display text-xl font-bold mb-1">Aktivitas Luar Ruangan</h3>
                        <p className="font-display text-2xl font-bold mb-4">Rp 150rb</p>
                        <ul className="space-y-2 text-sm text-white/70">
@@ -176,22 +377,22 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
          </section>
 
          {/* Gallery */}
-         <section className="py-24 max-w-7xl mx-auto px-8">
-            <p className="font-semibold text-sm mb-2 text-on-surface-variant tracking-wider uppercase text-center md:text-left">Pengalaman</p>
-            <h2 className="font-display text-[40px] leading-tight font-bold text-primary mb-12 text-center md:text-left">Pengalaman Cantigi</h2>
+         <section className="gallery-section py-24 max-w-7xl mx-auto px-8">
+            <p className="gallery-header-anim font-semibold text-sm mb-2 text-on-surface-variant tracking-wider uppercase text-center md:text-left opacity-0">Pengalaman</p>
+            <h2 className="gallery-header-anim font-display text-[40px] leading-tight font-bold text-primary mb-12 text-center md:text-left opacity-0">Pengalaman Cantigi</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                <div className="flex flex-col gap-4 md:gap-6">
-                  <img src={gal1} className="w-full rounded-2xl object-cover aspect-[4/5] hover:opacity-90 transition-opacity cursor-pointer" />
-                  <img src={gal2} className="w-full rounded-2xl object-cover aspect-square hover:opacity-90 transition-opacity cursor-pointer" />
+                  <img src={gal1} className="gallery-item-anim w-full rounded-2xl object-cover aspect-[4/5] hover:opacity-90 transition-opacity cursor-pointer opacity-0" />
+                  <img src={gal2} className="gallery-item-anim w-full rounded-2xl object-cover aspect-square hover:opacity-90 transition-opacity cursor-pointer opacity-0" />
                </div>
                <div className="flex flex-col gap-4 md:gap-6">
-                  <img src={gal3} className="w-full rounded-2xl object-cover aspect-[4/3] md:mt-12 hover:opacity-90 transition-opacity cursor-pointer" />
-                  <img src={gal5} className="w-full rounded-2xl object-cover aspect-square hover:opacity-90 transition-opacity cursor-pointer" />
+                  <img src={gal3} className="gallery-item-anim w-full rounded-2xl object-cover aspect-[4/3] md:mt-12 hover:opacity-90 transition-opacity cursor-pointer opacity-0" />
+                  <img src={gal5} className="gallery-item-anim w-full rounded-2xl object-cover aspect-square hover:opacity-90 transition-opacity cursor-pointer opacity-0" />
                </div>
                <div className="flex flex-col gap-4 md:gap-6">
-                  <img src={gal4} className="w-full rounded-2xl object-cover aspect-[3/4] hover:opacity-90 transition-opacity cursor-pointer" />
-                  <div className="bg-primary-container rounded-2xl aspect-[4/3] flex items-center justify-center overflow-hidden relative cursor-pointer group">
+                  <img src={gal4} className="gallery-item-anim w-full rounded-2xl object-cover aspect-[3/4] hover:opacity-90 transition-opacity cursor-pointer opacity-0" />
+                  <div className="gallery-item-anim bg-primary-container rounded-2xl aspect-[4/3] flex items-center justify-center overflow-hidden relative cursor-pointer group opacity-0">
                     <img src={gal6} className="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700" />
                     <span className="absolute font-display font-bold text-white text-3xl tracking-widest text-center">JELAJAH<br/>ALAM</span>
                   </div>
@@ -200,13 +401,14 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
          </section>
 
          {/* Footer CTA */}
-         <section className="bg-surface-container-low py-24 text-center px-8 border-t border-outline-variant/20">
-            <h2 className="font-display text-[40px] font-bold text-primary mb-4">Siap untuk Petualangan?</h2>
-            <p className="text-on-surface-variant max-w-2xl mx-auto mb-8 text-lg">Bergabunglah bersama kami untuk pengalaman tak terlupakan di jantung alam. Baik Anda mencari keseruan atau ketenangan, kami memiliki perjalanan sempurna yang menanti Anda.</p>
-            <button onClick={onBook} className="bg-[#10b981] hover:bg-[#059669] text-white px-8 py-4 rounded-full font-bold transition-colors shadow-lg shadow-[#10b981]/20 cursor-pointer">
+         <section className="footer-cta-section bg-surface-container-low py-24 text-center px-8 border-t border-outline-variant/20">
+            <h2 className="footer-cta-anim font-display text-[40px] font-bold text-primary mb-4 opacity-0">Siap untuk Petualangan?</h2>
+            <p className="footer-cta-anim text-on-surface-variant max-w-2xl mx-auto mb-8 text-lg opacity-0">Bergabunglah bersama kami untuk pengalaman tak terlupakan di jantung alam. Baik Anda mencari keseruan atau ketenangan, kami memiliki perjalanan sempurna yang menanti Anda.</p>
+            <button onClick={onBook} className="footer-cta-anim bg-[#10b981] hover:bg-[#059669] text-white px-8 py-4 rounded-full font-bold transition-colors shadow-lg shadow-[#10b981]/20 cursor-pointer opacity-0">
               Pesan Perjalanan Anda Sekarang
             </button>
          </section>
       </div>
   );
 }
+
