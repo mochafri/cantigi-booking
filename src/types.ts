@@ -1,5 +1,5 @@
 export type BookingData = {
-    date: number | null;
+    date: string | null;
     fullName: string;
     email: string;
     phone: string;

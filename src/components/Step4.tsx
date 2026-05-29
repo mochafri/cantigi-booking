@@ -58,7 +58,7 @@ export function Step4({ data, setData, onPrev }: { data: BookingData, setData: (
           <div className="p-6 flex flex-col gap-4 flex-grow">
             <div className="flex justify-between items-center py-2 border-b border-outline-variant/20">
               <span className="font-sans text-base text-on-surface-variant flex items-center gap-2"><Calendar size={18} /> Tanggal</span>
-              <span className="font-sans text-base font-semibold text-on-surface">{data.date || '-'} Okt 2024</span>
+              <span className="font-sans text-base font-semibold text-on-surface">{data.date || '-'}</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-outline-variant/20">
               <span className="font-sans text-base text-on-surface-variant flex items-center gap-2"><Users size={18} /> Jumlah Tamu</span>
