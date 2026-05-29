@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowLeft, Mountain, TreePine, Map, Compass, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Mountain, TreePine, Map, Compass, ArrowUpRight, Star } from 'lucide-react';
 
 const heroImage = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2070";
 const act1 = "https://images.unsplash.com/photo-1544334346-63e808d4b3eb?auto=format&fit=crop&q=80&w=800";
@@ -31,12 +31,46 @@ export function LandingPage({ onBook }: { onBook: () => void }) {
 
          {/* Hero */}
          <section className="px-8 pt-12 pb-24 max-w-7xl mx-auto flex flex-col items-center">
-            <div className="w-full text-center md:text-left mb-12">
-               <h1 className="font-display text-[48px] md:text-[80px] leading-[1.05] font-bold text-primary tracking-tight max-w-4xl">
-                 Where<span className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-[24px] border border-outline-variant align-middle ml-2"><ArrowRight className="text-primary w-6 h-6 md:w-8 md:h-8" /></span><br/>
-                 <span className="text-outline-variant">The Wild</span><br/>
-                 Meets The Fun
-               </h1>
+            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-12">
+               <div className="lg:col-span-8 text-center lg:text-left">
+                  <h1 className="font-display text-[48px] md:text-[80px] leading-[1.05] font-bold text-primary tracking-tight">
+                    Where<span className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-[24px] border border-outline-variant align-middle ml-2"><ArrowRight className="text-primary w-6 h-6 md:w-8 md:h-8" /></span><br/>
+                    <span className="text-outline-variant">The Wild</span><br/>
+                    Meets The Fun
+                  </h1>
+               </div>
+               
+               {/* Sesuatu disamping tulisan - Adventure Card Premium */}
+               <div className="lg:col-span-4 flex flex-col items-center lg:items-start gap-5 bg-surface-container-low border border-outline-variant/30 p-6 md:p-8 rounded-[24px] ambient-shadow-1 w-full max-w-md mx-auto lg:max-w-none">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#10b981]/10 text-[#059669] text-xs font-bold">
+                     <Star size={12} className="fill-current" />
+                     <span>Destinasi Pilihan Priangan</span>
+                  </div>
+                  
+                  <div className="flex -space-x-2.5">
+                     <img className="inline-block h-9 w-9 rounded-full ring-2 ring-surface-container-low object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="User 1" />
+                     <img className="inline-block h-9 w-9 rounded-full ring-2 ring-surface-container-low object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" alt="User 2" />
+                     <img className="inline-block h-9 w-9 rounded-full ring-2 ring-surface-container-low object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" alt="User 3" />
+                     <div className="flex items-center justify-center h-9 w-9 rounded-full ring-2 ring-surface-container-low bg-primary text-white text-[10px] font-bold font-display">+4.8k</div>
+                  </div>
+                  
+                  <div>
+                     <p className="font-display font-bold text-lg text-primary text-center lg:text-left">5,000+ Petualang Puas</p>
+                     <p className="text-xs text-on-surface-variant mt-1.5 leading-relaxed text-center lg:text-left">
+                        Nikmati pengalaman outbound, jembatan gantung spektakuler, flying fox, dan camping seru bersama keluarga di bawah kaki gunung asri.
+                     </p>
+                  </div>
+                  
+                  <div className="w-full border-t border-outline-variant/30 pt-4 flex justify-between items-center gap-4">
+                     <div>
+                        <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Mulai dari</span>
+                        <p className="font-display font-bold text-base text-[#10b981]">Rp 150.000</p>
+                     </div>
+                     <button onClick={onBook} className="bg-primary hover:bg-primary/90 text-on-primary px-5 py-2.5 rounded-full font-bold text-xs transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm">
+                        Booking <ArrowRight size={14} />
+                     </button>
+                  </div>
+               </div>
             </div>
             <div className="w-full aspect-[21/9] rounded-[32px] overflow-hidden">
                <img src={heroImage} alt="Majestic mountain landscape" className="w-full h-full object-cover" />
